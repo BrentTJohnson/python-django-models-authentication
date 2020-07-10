@@ -23,10 +23,20 @@ ALL_POSTS = [
  },
 ]
 
+
 def index(request):
     posts = BlogPost.objects.all()
     return render(request, 'mainapp/index.html', {'posts':posts})
 
+
 def post(request, id):
     post = get_object_or_404(BlogPost, pk=id)
     return render(request, 'mainapp/post.html', {'object': post})
+
+
+def tag_posts(request, name):
+    name  = name.lower()
+    title = "Posts about {}".format(name)
+    tag   = get_object_or_404(Tag, name = name)
+    posts = BlogPost.objects.filter(tags=tag)
+    return render(request, 'mainapp/filtered_post_list.html', {'posts':posts, 'title':title,})
